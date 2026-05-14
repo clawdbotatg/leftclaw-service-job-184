@@ -1,85 +1,66 @@
-# 🏗 Scaffold-ETH 2
+# NFT Studio
+
+A lightweight browser-based canvas editor built for NFT creators. Stack, edit, and export artwork — entirely in your browser, no cloud, no wallet required.
 
 **Live URL:** https://bafybeiaum5dbiqauz24xel33lo6btipcdojdqlgdr2k4kadizm2j4geake.ipfs.community.bgipfs.com/
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+---
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+## Features
 
-> [!NOTE]
-> 🤖 Scaffold-ETH 2 is AI-ready! It has everything agents need to build on Ethereum. Check `.agents/`, `.claude/`, `.opencode` or `.cursor/` for more info.
+- **Layer system** — add images as layers, reorder, rename, duplicate, hide, lock, set opacity
+- **Transform tool** — move, resize (8 handles), rotate with snap guides
+- **Brush & Eraser** — paint or erase directly on layer bitmaps; size, opacity, softness, shape
+- **Eyedropper** — sample canvas color sets active brush color
+- **Outline Generator** — expand alpha edge to create an outline as a new layer (adjustable thickness + color)
+- **Border Generator** — add a border around a layer or the full canvas
+- **Glow / Drop Shadow** — basic outer glow and drop shadow effects
+- **Background Removal** — fully client-side via @imgly/background-removal (ONNX/WASM, no API key)
+- **Export** — PNG, JPG, transparent PNG; full canvas or selected layer
+- **Project Save/Load** — download `.nfts` project file (JSON + base64 image data); reload to restore editor
 
-⚙️ Built using NextJS, RainbowKit, Foundry, Wagmi, Viem, and Typescript.
+## Design
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+- Dark mode, creator-focused (Photoshop-lite aesthetic)
+- 1080x1080 default canvas with zoom, pan, grid overlay, snap guides
+- Entirely client-side — no server, no database, no authentication
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+## Local Development
 
-## Requirements
-
-Before you begin, you need to install the following tools:
-
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
-
-## Quickstart
-
-To get started with Scaffold-ETH 2, follow the steps below:
-
-1. Install dependencies if it was skipped in CLI:
-
-```
-cd my-dapp-example
+```bash
 yarn install
+cd packages/nextjs && yarn dev
 ```
 
-2. Run a local network in the first terminal:
+## Production Build
 
-```
-yarn chain
-```
-
-This command starts a local Ethereum network using Foundry. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/foundry/foundry.toml`.
-
-3. On a second terminal, deploy the test contract:
-
-```
-yarn deploy
+```bash
+cd packages/nextjs
+NODE_OPTIONS="--require ./polyfill-localstorage.cjs" \
+  NEXT_PUBLIC_IPFS_BUILD=true \
+  yarn build
+# output is in packages/nextjs/out/
 ```
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/script` to deploy the contract to the network. You can also customize the deploy script.
+## Architecture
 
-4. On a third terminal, start your NextJS app:
+- **Framework:** Next.js 15 static export (output: export) — deployable to IPFS
+- **Canvas engine:** fabric.js v7
+- **Background removal:** @imgly/background-removal (WASM, fully client-side)
+- **Styling:** DaisyUI + Tailwind CSS, dark theme
+- **Monorepo:** Scaffold-ETH 2 (packages/foundry untouched — V1 has no on-chain component)
 
-```
-yarn start
-```
+## V1 Scope
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+This is a zero-chain V1. Future versions may add:
+- Export + mint (ERC721/ERC1155 deployer)
+- IPFS publishing of artwork
+- Onchain project hash registry
+- Wallet login + CLAWD/CV premium gating
+- Batch trait export, animation, AI generation
 
-Run smart contract test with `yarn foundry:test`
+See NEXT_STEPS.md for the full future roadmap.
 
-- Edit your smart contracts in `packages/foundry/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/foundry/script`
+## Repo
 
-
-## Documentation
-
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+https://github.com/clawdbotatg/leftclaw-service-job-184
